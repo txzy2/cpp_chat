@@ -4,47 +4,50 @@
 #include <ctime>
 #include <optional>
 #include <stdexcept>
-
-#include "../src/lib/types/message_types.h"
-
 #include <string>
 
+#include "../src/lib/types/message_types.h"
 #include "user.h"
 
 class ChatMessage
 {
-    std::string id;
-    std::string msg;
-    MessageType type;
-
+    std::string id_;
+    std::string msg_;
+    MessageType type_;
     User user_;
-
-    std::time_t createdAt;
-    std::time_t updatedAt;
+    std::time_t createdAt_;
+    std::time_t updatedAt_;
 
 public:
-    explicit ChatMessage(const MessageType type, User user) : type(type), user_(user)
+    explicit ChatMessage(const MessageType type, const User& user)
+        : type_(type), user_(user)
     {
-        if (type == MessageType::UNKNOWN)
+        if (type_ == UNKNOWN)
         {
             throw std::logic_error("Unknown message type");
         }
 
-        createdAt = std::time(nullptr);
-        updatedAt = createdAt;
+        if (user_.getId() == 0) {
+            throw std::logic_error("Invalid user: ID is 0");
+        }
+
+        createdAt_ = std::time(nullptr);
+        updatedAt_ = createdAt_;
     } // TODO: Generate UUID
 
     void setMsg(const std::string& msg)
     {
         if (msg.empty()) return;
-        this->msg = msg;
+        msg_ = msg;
+        updatedAt_ = std::time(nullptr);
     }
 
-    [[nodiscard]] const std::string& getMsg() const { return this->msg; }
-    [[nodiscard]] MessageType getType() const { return this->type; }
-    [[nodiscard]] std::time_t getCreatedAt() const { return this->createdAt; }
-    [[nodiscard]] std::time_t getUpdatedAt() const { return this->updatedAt; }
-    [[nodiscard]] User getUser() const { return user_; }
+    // Геттеры
+    [[nodiscard]] const std::string& getMsg() const { return msg_; }
+    [[nodiscard]] MessageType getType() const { return type_; }
+    [[nodiscard]] std::time_t getCreatedAt() const { return createdAt_; }
+    [[nodiscard]] std::time_t getUpdatedAt() const { return updatedAt_; }
+    [[nodiscard]] const User& getUser() const { return user_; }
 };
 
 #endif //CPP_TEST_CHAT_MESSAGE_H

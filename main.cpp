@@ -1,3 +1,4 @@
+#include <iostream>
 #include <vector>
 
 #include "include/chat.h"
@@ -20,11 +21,18 @@ int main()
 
     users.push_back(u2);
 
-    Chat c("Chat1");
-    c.addUser(u1);
-    c.addUser(u2);
-    c.addMessage("MSG", MessageType::STRING, u1);
-    c.getInfo();
+    try
+    {
+        Chat c("Chat1");
+        c.addUser(u1);
+        c.addUser(u2);
+        c.addMessage("MSG", MessageType::STRING, u1);
+        c.getInfo();
+    }
+    catch (std::exception& e)
+    {
+        std::cerr << e.what();
+    }
 
     return 0;
 }
