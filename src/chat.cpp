@@ -9,14 +9,29 @@
 #include <format>
 #include <iostream>
 
-void Chat::addMessage(const std::string& msg, MessageType type)
+void Chat::addMessage(const std::string& msg, const MessageType type, const User& user)
 {
-    if (users.empty() && users.size() < 2) { throw std::logic_error("No users found"); }
-    if (messages.size() >= MAX_MESSAGES) { messages.pop_front(); }
+    if (users_.empty())
+    {
+        throw std::logic_error("No users found");
+    }
 
-    ChatMessage msgObj(type);
+    if (const auto it = std::ranges::find_if(users_, [&user](const User& u)
+    {
+        return u.getId() == user.getId();
+    }); it == users_.end())
+    {
+        throw std::logic_error("User not found in chat");
+    }
+
+    if (messages_.size() >= MAX_MESSAGES)
+    {
+        messages_.pop_front();
+    }
+
+    ChatMessage msgObj(type, user);
     msgObj.setMsg(msg);
-    messages.push_back(std::move(msgObj));
+    messages_.push_back(std::move(msgObj));
 }
 
 void Chat::getInfo() const
@@ -25,10 +40,11 @@ void Chat::getInfo() const
     if (!lastMsg) { throw std::logic_error("No last message"); }
 
     const std::string output = std::format(
-        "ID: {}\nCHAT NAME: {}\nLAST MSG: {} (Type: {})\nCREATED_AT: {}\nUPDATED_AT: {}\n",
-        id,
-        name,
+        "ID: {}\nCHAT NAME: {}\nLAST MSG: {} (From: {}, Type: {})\nCREATED_AT: {}\nUPDATED_AT: {}\n",
+        id_,
+        name_,
         lastMsg->getMsg(),
+        lastMsg->getUser().getName(),
         enumToString(lastMsg->getType()),
         DateTimeHelper::formatTime(lastMsg->getCreatedAt()),
         DateTimeHelper::formatTime(lastMsg->getUpdatedAt())
@@ -37,12 +53,12 @@ void Chat::getInfo() const
     std::cout << output;
 
     std::cout << "\nUSERS:\n";
-    for (size_t i = 0; i < users.size(); ++i)
+    for (size_t i = 0; i < users_.size(); ++i)
     {
-        std::cout << "ID: " << users[i].getId() << " NAME: " << users[i].getName()
-            << " (" << (users[i].getStatus() == Status::ACTIVE ? "Active" : "Inactive") << ")";
+        std::cout << "ID: " << users_[i].getId() << " NAME: " << users_[i].getName()
+            << " (" << (users_[i].getStatus() == Status::ACTIVE ? "Active" : "Inactive") << ")";
 
-        if (i != users.size() - 1)
+        if (i != users_.size() - 1)
         {
             std::cout << ", ";
         }

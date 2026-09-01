@@ -23,7 +23,7 @@ int main()
     Chat c("Chat1");
     c.addUser(u1);
     c.addUser(u2);
-    c.addMessage("MSG", MessageType::STRING);
+    c.addMessage("MSG", MessageType::STRING, u1);
     c.getInfo();
 
     return 0;
