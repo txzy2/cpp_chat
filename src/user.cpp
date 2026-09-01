@@ -3,3 +3,5 @@
 //
 
 #include "../include/user.h"
+
+uint64_t User::nextId_ = 0;

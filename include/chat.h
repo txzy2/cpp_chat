@@ -2,6 +2,7 @@
 #define CPP_TEST_CHAT_H
 #include <deque>
 #include <string>
+#include <utility>
 
 #include "chat_message.h"
 #include "user.h"
@@ -17,7 +18,7 @@ class Chat
     static constexpr size_t MAX_MESSAGES = 100;
 
 public:
-    explicit Chat(const std::string& name) : name(name)
+    explicit Chat(std::string  name) : name(std::move(name))
     {
         this->id = messages.size() + 1;
     }
@@ -25,7 +26,7 @@ public:
     void addMessage(const std::string& msg, MessageType type);
     void addUser(const User& user) { this->users.push_back(user); }
 
-    const ChatMessage* getLastMsg() const
+    [[nodiscard]] const ChatMessage* getLastMsg() const
     {
         if (users.empty() && users.size() < 2) { throw std::logic_error("No users found"); }
         return messages.empty() ? nullptr : &messages.back();
@@ -43,8 +44,8 @@ public:
         return users;
     }
 
-    u_int64_t getId() const { return this->id; }
-    std::string getName() const { return this->name; }
+    [[nodiscard]] u_int64_t getId() const { return this->id; }
+    [[nodiscard]] std::string getName() const { return this->name; }
 
     void getInfo() const;
 };

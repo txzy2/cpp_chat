@@ -6,14 +6,14 @@ int main()
 {
     std::vector<User> users;
 
-    User u1(users.size());
+    User u1;
     u1.setName("Anton");
     u1.setEmail("anton@anton.ru");
     u1.setUsername("anton");
 
     users.push_back(u1);
 
-    User u2(users.size());
+    User u2;
     u2.setName("Masha");
     u2.setEmail("masha@masha.ru");
     u2.setUsername("masha");

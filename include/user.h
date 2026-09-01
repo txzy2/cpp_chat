@@ -6,51 +6,46 @@
 #define CPP_TEST_USER_H
 
 #include <cstdint>
-#include <stdexcept>
 #include <string>
 
 #include "../src/lib/types/status_types.h"
 
 class User
 {
-    uint64_t id;
+    uint64_t id_;
 
-    std::string name;
-    std::string username;
-    std::string email;
-    std::string password;
+    std::string name_;
+    std::string username_;
+    std::string email_;
+    std::string password_;
 
-    std::string extId;
+    std::string extId_;
 
-    Status status;
+    Status status_;
+
+    static uint64_t nextId_;
 
 public:
-    explicit User(const size_t size) : id(id + size)
+    explicit User() : id_(++nextId_), status_(Status::ACTIVE)
     {
-        if (size < 0)
-        {
-            throw std::out_of_range("size must be non-negative");
-        }
-
-        this->status = Status::ACTIVE;
-        //TODO: Генерировать extId
+        // generateExtId();
     }
 
-    void setName(const std::string& name) { this->name = name; }
-    void setUsername(const std::string& username) { this->username = username; }
-    void setEmail(const std::string& email) { this->email = email; }
-    void setPassword(const std::string& password) { this->password = password; }
-    void setStatus(const Status status) { this->status = status; }
+    void setName(const std::string& name) { name_ = name; }
+    void setUsername(const std::string& username) { username_ = username; }
+    void setEmail(const std::string& email) { email_ = email; }
+    void setPassword(const std::string& password) { password_ = password; }
+    void setStatus(const Status status) { status_ = status; }
 
-    std::string getExtId() { return this->extId; }
-    std::string getName() const { return this->name; }
-    std::string getUsername() { return this->username; }
-    std::string getEmail() { return this->email; }
-    Status getStatus() const { return this->status; }
+    [[nodiscard]] uint64_t getId() const { return id_; }
+    [[nodiscard]] std::string getExtId() const { return extId_; }
+    [[nodiscard]] std::string getName() const { return name_; }
+    [[nodiscard]] std::string getUsername() const { return username_; }
+    [[nodiscard]] std::string getEmail() const { return email_; }
+    [[nodiscard]] Status getStatus() const { return status_; }
 
 private:
     void generateExtId();
-
 };
 
 

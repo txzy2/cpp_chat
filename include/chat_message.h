@@ -2,6 +2,7 @@
 #define CPP_TEST_CHAT_MESSAGE_H
 
 #include <ctime>
+#include <stdexcept>
 
 #include "../src/lib/types/message_types.h"
 
@@ -17,8 +18,13 @@ class ChatMessage
     std::time_t updatedAt;
 
 public:
-    ChatMessage()
+    explicit ChatMessage(const MessageType type) : type(type)
     {
+        if (type == MessageType::UNKNOWN)
+        {
+            throw std::logic_error("Unknown message type");
+        }
+
         createdAt = std::time(nullptr);
         updatedAt = createdAt;
     } // TODO: Generate UUID
@@ -29,15 +35,13 @@ public:
         this->msg = msg;
     }
 
-    void setType(const MessageType type) { this->type = type; }
-
-    const std::string& getMsg() const { return this->msg; }
+    [[nodiscard]] const std::string& getMsg() const { return this->msg; }
     std::string& getMsg() { return this->msg; }
 
-    MessageType getType() const { return this->type; }
+    [[nodiscard]] MessageType getType() const { return this->type; }
 
-    std::time_t getCreatedAt() const { return this->createdAt; }
-    std::time_t getUpdatedAt() const { return this->updatedAt; }
+    [[nodiscard]] std::time_t getCreatedAt() const { return this->createdAt; }
+    [[nodiscard]] std::time_t getUpdatedAt() const { return this->updatedAt; }
 };
 
 #endif //CPP_TEST_CHAT_MESSAGE_H

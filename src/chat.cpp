@@ -3,23 +3,19 @@
 //
 
 #include "../include/chat.h"
+#include "lib/types/message_types.h"
+#include "../include/date_time_helper.h"
 
 #include <format>
-
-#include "lib/types/message_types.h"
-
 #include <iostream>
-
-#include "../include/date_time_helper.h"
 
 void Chat::addMessage(const std::string& msg, MessageType type)
 {
     if (users.empty() && users.size() < 2) { throw std::logic_error("No users found"); }
     if (messages.size() >= MAX_MESSAGES) { messages.pop_front(); }
 
-    ChatMessage msgObj;
+    ChatMessage msgObj(type);
     msgObj.setMsg(msg);
-    msgObj.setType(type);
     messages.push_back(std::move(msgObj));
 }
 
@@ -43,7 +39,7 @@ void Chat::getInfo() const
     std::cout << "\nUSERS:\n";
     for (size_t i = 0; i < users.size(); ++i)
     {
-        std::cout << users[i].getName()
+        std::cout << "ID: " << users[i].getId() << " NAME: " << users[i].getName()
             << " (" << (users[i].getStatus() == Status::ACTIVE ? "Active" : "Inactive") << ")";
 
         if (i != users.size() - 1)
