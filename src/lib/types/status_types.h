@@ -1,0 +1,13 @@
+#ifndef SRC_LIB_TYPES_STATUS_TYPES_HPP
+#define SRC_LIB_TYPES_STATUS_TYPES_HPP
+
+enum Status
+{
+    ACTIVE = 0,
+    DISABLED,
+    DELETED,
+    BANNED,
+    UNKNOWN_STATUS
+};
+
+#endif
