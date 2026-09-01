@@ -1,0 +1,35 @@
+components_manager:
+  components:
+    server:
+      listener:
+        port: 8080
+        task_processor: main-task-processor
+
+    handler-hello:
+      path: /hello
+      method: GET
+      task_processor: main-task-processor
+
+    logging:
+      fs-task-processor: fs-task-processor
+      loggers:
+        default:
+          file_path: '@stderr'
+          level: info
+
+    dns-client:
+      fs-task-processor: fs-task-processor
+
+    dynamic-config:
+      fs-cache-path: ''
+      defaults:
+        USERVER_LOG_REQUEST: true
+        USERVER_LOG_REQUEST_HEADERS: false
+
+  task_processors:
+    main-task-processor:
+      worker_threads: 4
+    fs-task-processor:
+      worker_threads: 2
+
+  default_task_processor: main-task-processor

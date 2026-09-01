@@ -1,12 +1,17 @@
 #include <iostream>
 #include <vector>
 
-#include "include/cpp_test/user.h"
 #include "include/cpp_test/chat.h"
+#include "include/cpp_test/user.h"
 
+#include <userver/clients/dns/component.hpp>
+#include <userver/components/minimal_server_component_list.hpp>
+#include <userver/server/handlers/tests_control.hpp>
+#include <userver/utils/daemon_run.hpp>
 
-int main()
-{
+#include "hello_handler.hpp"
+
+int main(int argc, char *argv[]) {
     std::vector<User> users;
 
     User u1;
@@ -23,18 +28,20 @@ int main()
 
     users.push_back(u2);
 
-    try
-    {
+    try {
         Chat c("Chat1");
         c.addUser(u1);
         c.addUser(u2);
         c.addMessage("MSG", MessageType::STRING, u1);
         c.getInfo();
-    }
-    catch (std::exception& e)
-    {
+    } catch (std::exception &e) {
         std::cerr << e.what();
     }
 
-    return 0;
+
+    auto component_list = userver::components::MinimalServerComponentList()
+                                  .Append<userver::clients::dns::Component>()
+                                  .Append<HelloHandler>();
+
+    return userver::utils::DaemonMain(argc, argv, component_list);
 }
