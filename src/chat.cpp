@@ -2,9 +2,9 @@
 // Created by kamaev on 9/1/26.
 //
 
-#include "../include/chat.h"
-#include "lib/types/message_types.h"
-#include "../include/date_time_helper.h"
+#include "../include/cpp_test/chat.h"
+#include "../include/cpp_test/message_types.h"
+#include "../include/cpp_test/date_time_helper.h"
 
 #include <format>
 #include <iostream>

@@ -6,7 +6,7 @@
 #include <stdexcept>
 #include <string>
 
-#include "../src/lib/types/message_types.h"
+#include "message_types.h"
 #include "user.h"
 
 class ChatMessage

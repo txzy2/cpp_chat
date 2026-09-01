@@ -1,7 +1,9 @@
 #include <iostream>
 #include <vector>
 
-#include "include/chat.h"
+#include "include/cpp_test/user.h"
+#include "include/cpp_test/chat.h"
+
 
 int main()
 {

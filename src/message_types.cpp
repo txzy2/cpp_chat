@@ -1,4 +1,4 @@
-#include "lib/types/message_types.h"
+#include "../include/cpp_test/message_types.h"
 
 #include <cstring>
 #include <string>

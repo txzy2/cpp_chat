@@ -8,7 +8,7 @@
 #include <cstdint>
 #include <string>
 
-#include "../src/lib/types/status_types.h"
+#include "status_types.h"
 
 class User
 {
