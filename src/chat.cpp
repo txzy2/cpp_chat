@@ -3,9 +3,14 @@
 //
 
 #include "../include/chat.h"
+
+#include <format>
+
 #include "lib/types/message_types.h"
 
 #include <iostream>
+
+#include "../include/date_time_helper.h"
 
 void Chat::addMessage(const std::string& msg, MessageType type)
 {
@@ -21,22 +26,30 @@ void Chat::addMessage(const std::string& msg, MessageType type)
 void Chat::getInfo() const
 {
     const auto lastMsg = getLastMsg();
+    if (!lastMsg) { throw std::logic_error("No last message"); }
 
-    std::printf("ID: %lu\nCHAT NAME: %s\nLAST MSG: %s (Type: %s)\n",
-                id,
-                name.c_str(),
-                lastMsg ? lastMsg->getMsg().c_str() : "Empty",
-                lastMsg ? enumToString(lastMsg->getType()).c_str() : "UNKNOWN");
+    const std::string output = std::format(
+        "ID: {}\nCHAT NAME: {}\nLAST MSG: {} (Type: {})\nCREATED_AT: {}\nUPDATED_AT: {}\n",
+        id,
+        name,
+        lastMsg->getMsg(),
+        enumToString(lastMsg->getType()),
+        DateTimeHelper::formatTime(lastMsg->getCreatedAt()),
+        DateTimeHelper::formatTime(lastMsg->getUpdatedAt())
+    );
 
-    std::printf("\nUSERS:\n");
+    std::cout << output;
+
+    std::cout << "\nUSERS:\n";
     for (size_t i = 0; i < users.size(); ++i)
     {
-        std::printf("%s (%s)", users[i].getName().c_str(),
-                    users[i].getStatus() == Status::ACTIVE ? "Active" : "Inactive");
+        std::cout << users[i].getName()
+            << " (" << (users[i].getStatus() == Status::ACTIVE ? "Active" : "Inactive") << ")";
 
         if (i != users.size() - 1)
         {
-            std::printf(", ");
+            std::cout << ", ";
         }
     }
+    std::cout << "\n";
 }
