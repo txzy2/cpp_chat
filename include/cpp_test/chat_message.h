@@ -2,16 +2,20 @@
 #define CPP_TEST_CHAT_MESSAGE_H
 
 #include <ctime>
-#include <optional>
 #include <stdexcept>
 #include <string>
+#include <utility>
 
 #include "message_types.h"
 #include "user.h"
 
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
+
 class ChatMessage
 {
-    std::string id_;
+    boost::uuids::uuid id_;
     std::string msg_;
     MessageType type_;
     User user_;
@@ -19,8 +23,8 @@ class ChatMessage
     std::time_t updatedAt_;
 
 public:
-    explicit ChatMessage(const MessageType type, const User& user)
-        : type_(type), user_(user)
+    explicit ChatMessage(const MessageType type, User user)
+        : type_(type), user_(std::move(user))
     {
         if (type_ == UNKNOWN)
         {
@@ -33,7 +37,9 @@ public:
 
         createdAt_ = std::time(nullptr);
         updatedAt_ = createdAt_;
-    } // TODO: Generate UUID
+
+        id_ = boost::uuids::random_generator()();
+    }
 
     void setMsg(const std::string& msg)
     {
@@ -43,6 +49,7 @@ public:
     }
 
     // Геттеры
+    [[nodiscard]] boost::uuids::uuid getId() const { return id_; }
     [[nodiscard]] const std::string& getMsg() const { return msg_; }
     [[nodiscard]] MessageType getType() const { return type_; }
     [[nodiscard]] std::time_t getCreatedAt() const { return createdAt_; }

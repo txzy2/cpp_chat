@@ -5,8 +5,10 @@
 #ifndef CPP_TEST_USER_H
 #define CPP_TEST_USER_H
 
-#include <cstdint>
 #include <string>
+
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
 
 #include "status_types.h"
 
@@ -19,16 +21,16 @@ class User
     std::string email_;
     std::string password_;
 
-    std::string extId_;
+    boost::uuids::uuid extId_;
 
     Status status_;
 
     static uint64_t nextId_;
 
 public:
-    explicit User() : id_(++nextId_), status_(Status::ACTIVE)
+    explicit User() : id_(++nextId_), status_(ACTIVE)
     {
-        // generateExtId();
+        extId_ = boost::uuids::random_generator()();
     }
 
     void setName(const std::string& name) { name_ = name; }
@@ -38,7 +40,7 @@ public:
     void setStatus(const Status status) { status_ = status; }
 
     [[nodiscard]] uint64_t getId() const { return id_; }
-    [[nodiscard]] std::string getExtId() const { return extId_; }
+    [[nodiscard]] boost::uuids::uuid getExtId() const { return extId_; }
     [[nodiscard]] std::string getName() const { return name_; }
     [[nodiscard]] std::string getUsername() const { return username_; }
     [[nodiscard]] std::string getEmail() const { return email_; }

@@ -39,10 +39,11 @@ void Chat::getInfo() const
     const auto lastMsg = getLastMsg();
     if (!lastMsg) { throw std::logic_error("No last message"); }
 
-    const std::string output = std::format(
-        "ID: {}\nCHAT NAME: {}\nLAST MSG: {} (From: {}, Type: {})\nCREATED_AT: {}\nUPDATED_AT: {}\n",
-        id_,
+    std::cout << std::format(
+        "ID: {}\nCHAT NAME: {}\nLAST MSG ID: {}, TEXT: {} (From: {}, Type: {})\nCREATED_AT: {}\nUPDATED_AT: {}\n",
+        boost::uuids::to_string(id_),
         name_,
+        boost::uuids::to_string(lastMsg->getId()),
         lastMsg->getMsg(),
         lastMsg->getUser().getName(),
         enumToString(lastMsg->getType()),
@@ -50,18 +51,11 @@ void Chat::getInfo() const
         DateTimeHelper::formatTime(lastMsg->getUpdatedAt())
     );
 
-    std::cout << output;
-
     std::cout << "\nUSERS:\n";
-    for (size_t i = 0; i < users_.size(); ++i)
+    for (const auto & user : users_)
     {
-        std::cout << "ID: " << users_[i].getId() << " NAME: " << users_[i].getName()
-            << " (" << (users_[i].getStatus() == Status::ACTIVE ? "Active" : "Inactive") << ")";
-
-        if (i != users_.size() - 1)
-        {
-            std::cout << ", ";
-        }
+        std::cout << "EXT_ID: " << user.getExtId() << " NAME: " << user.getName()
+            << " (" << (user.getStatus() == Status::ACTIVE ? "Active" : "Inactive") << ")\n";
     }
     std::cout << "\n";
 }

@@ -4,10 +4,10 @@
 #include "include/cpp_test/chat.h"
 #include "include/cpp_test/user.h"
 
-#include <userver/clients/dns/component.hpp>
-#include <userver/components/minimal_server_component_list.hpp>
-#include <userver/server/handlers/tests_control.hpp>
-#include <userver/utils/daemon_run.hpp>
+// #include <userver/clients/dns/component.hpp>
+// #include <userver/components/minimal_server_component_list.hpp>
+// #include <userver/server/handlers/tests_control.hpp>
+// #include <userver/utils/daemon_run.hpp>
 
 #include "hello_handler.hpp"
 
@@ -32,16 +32,17 @@ int main(int argc, char *argv[]) {
         Chat c("Chat1");
         c.addUser(u1);
         c.addUser(u2);
-        c.addMessage("MSG", MessageType::STRING, u1);
+        c.addMessage("MSG", STRING, u1);
         c.getInfo();
     } catch (std::exception &e) {
         std::cerr << e.what();
     }
+    //
+    // auto component_list = userver::components::MinimalServerComponentList()
+    //                               .Append<userver::clients::dns::Component>()
+    //                               .Append<HelloHandler>();
+    //
+    // return userver::utils::DaemonMain(argc, argv, component_list);
 
-
-    auto component_list = userver::components::MinimalServerComponentList()
-                                  .Append<userver::clients::dns::Component>()
-                                  .Append<HelloHandler>();
-
-    return userver::utils::DaemonMain(argc, argv, component_list);
+    return 0;
 }

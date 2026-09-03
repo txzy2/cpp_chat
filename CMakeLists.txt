@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_subdirectory(third_party/userver)
+#add_subdirectory(third_party/userver)
 
 add_executable(cpp_test
         main.cpp
@@ -18,4 +18,4 @@ add_executable(cpp_test
 )
 
 target_include_directories(cpp_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(cpp_test PRIVATE userver-core)
+#target_link_libraries(cpp_test PRIVATE userver-core)
