@@ -39,34 +39,29 @@ void Chat::getInfo() const
         throw std::logic_error("No last message");
     }
 
-    const auto chatType = (type_ == INDIVIDUAL) ? "Individual" : "Group";
-    const auto lastMsgTime = DateTimeHelper::formatTime(lastMsg->getCreatedAt());
-    const auto lastMsgUpdateTime = DateTimeHelper::formatTime(lastMsg->getUpdatedAt());
-
     std::cout << std::format(
-        "\nID: {}\n"
-        "CHAT NAME: {} (TYPE: {})\n\n  TEXT: {} (ID: {})\n  From: {} (Type: {})\n\n  CREATED_AT: {}\n  UPDATED_AT: {}\n",
-        boost::uuids::to_string(id_),
+        "\n=== CHAT ({}): {} (ID: {}) ===\n\n",
+        (type_ == INDIVIDUAL) ? "Individual" : "Group",
         name_,
-        chatType,
-        lastMsg->getMsg(),
-        boost::uuids::to_string(lastMsg->getId()),
-        lastMsg->getUser().getName(),
-        enumToString(lastMsg->getType()),
-        lastMsgTime,
-        lastMsgUpdateTime
+        boost::uuids::to_string(id_)
     );
 
-    std::cout << "\nUSERS:\n";
-    for (const auto& user : users_)
+    if (const std::optional<User> to = getReceiverUser(); to.has_value())
     {
-        const auto status = (user.getStatus() == ACTIVE) ? "Active" : "Inactive";
-
         std::cout << std::format(
-            "EXT_ID: {} NAME: {} ({})\n",
-            boost::uuids::to_string(user.getExtId()),
-            user.getName(),
-            status
+            " - TEXT: {} (ID: {})\n - From: {} (Name: {})\n - To: {} (Name: {})\n\n - CREATED_AT: {}\n - UPDATED_AT: {}\n",
+            lastMsg->getMsg(),
+            boost::uuids::to_string(lastMsg->getId()),
+            lastMsg->getUser().getName(),
+            boost::uuids::to_string(to->getExtId()),
+            to->getName(),
+            enumToString(lastMsg->getType()),
+            DateTimeHelper::formatTime(lastMsg->getCreatedAt()),
+            DateTimeHelper::formatTime(lastMsg->getUpdatedAt())
         );
+
+        return;
     }
+
+    throw std::logic_error("No user in chat");
 }

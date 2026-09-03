@@ -9,51 +9,49 @@
 // #include <userver/server/handlers/tests_control.hpp>
 // #include <userver/utils/daemon_run.hpp>
 
+#include <array>
+#include <memory>
+
 #include "hello_handler.hpp"
 
+constexpr std::array<std::string, 3> names = {"Anton", "Dima", "Masha"};
+constexpr std::array<std::string, 3> emails = {"anton@anton.ru", "dima@dima.ru", "masha@masha.ru"};
+
+static void generateUser(User &u, const int index)
+{
+    u.setName(names[index]);
+    u.setEmail(emails[index]);
+    u.setUsername(names[index]);
+}
+
 int main(int argc, char *argv[]) {
-    std::vector<User> users;
-    std::vector<Chat> chats;
+    std::array<std::unique_ptr<User>, names.size()> users;
 
-    User u1;
-    u1.setName("Anton");
-    u1.setEmail("anton@anton.ru");
-    u1.setUsername("anton");
-
-    users.push_back(u1);
-
-    User u2;
-    u2.setName("Masha");
-    u2.setEmail("masha@masha.ru");
-    u2.setUsername("masha");
-
-    users.push_back(u2);
-
-    User u3;
-    u3.setName("Dima");
-    u3.setEmail("dima@dima.ru");
-    u3.setUsername("dima");
-
-    users.push_back(u3);
+    for (int i = 0; i < names.size(); ++i)
+    {
+        users[i] = std::make_unique<User>();
+        generateUser(*users[i], i);
+    }
 
     try {
-        Chat c("Chat1");
-        c.addUser(u1);
-        c.addUser(u2);
-        c.addMessage("Привет, как дела?", STRING, u1);
-        chats.push_back(c);
+        std::vector<Chat> chats;
+        Chat c("Chat1"), c2("Chat2");
 
-        Chat c2("Chat2");
-        c2.addUser(u3);
-        c2.addUser(u1);
-        c2.addMessage("Димка, в майн пойдешь?", STRING, u1);
+        c.addUser(*users[0]);
+        c.addUser(*users[2]);
+        c.addMessage("Привет, как дела?", STRING, *users[0]);
+
+        c2.addUser(*users[1]);
+        c2.addUser(*users[0]);
+        c2.addMessage("Димка, в майн пойдешь?", STRING, *users[0]);
+
+        chats.push_back(c);
         chats.push_back(c2);
 
         for (auto& chat : chats)
         {
             chat.getInfo();
         }
-
     } catch (std::exception &e) {
         std::cerr << e.what();
     }
