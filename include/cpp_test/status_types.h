@@ -1,7 +1,7 @@
 #ifndef SRC_LIB_TYPES_STATUS_TYPES_HPP
 #define SRC_LIB_TYPES_STATUS_TYPES_HPP
 
-enum Status
+enum class Status
 {
     ACTIVE = 0,
     DISABLED,

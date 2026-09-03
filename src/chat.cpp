@@ -18,7 +18,7 @@ void Chat::addMessage(const std::string& msg, const MessageType type, const User
 
     if (std::ranges::find_if(users_, [&user](const User& u)
     {
-        return u.getId() == user.getId() && u.getStatus() == ACTIVE;
+        return u.getId() == user.getId() && u.getStatus() == Status::ACTIVE;
     }) == users_.end())
     {
         throw std::logic_error("User not found in chat");
@@ -39,7 +39,7 @@ std::optional<User> Chat::getReceiverUser() const
     if (users_.size() != 2) { return std::nullopt; }
 
     for (const auto& user : users_) {
-        if (user.getId() != lastMsg->getUser().getId() && user.getStatus() == ACTIVE) {
+        if (user.getId() != lastMsg->getUser().getId() && user.getStatus() == Status::ACTIVE) {
             return user;
         }
     }

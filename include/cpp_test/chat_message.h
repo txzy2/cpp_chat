@@ -25,7 +25,7 @@ class ChatMessage
 public:
     explicit ChatMessage(const MessageType type, User user) : type_(type), user_(std::move(user))
     {
-        if (type_ == UNKNOWN)
+        if (type_ == MessageType::UNKNOWN)
         {
             throw std::logic_error("Unknown message type");
         }

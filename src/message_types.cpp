@@ -7,11 +7,11 @@ std::string enumToString(const MessageType type)
 {
     switch (type)
     {
-    case PHOTO:
+    case MessageType::PHOTO:
         return "photo";
-    case STRING:
+    case MessageType::STRING:
         return "string";
-    case VIDEO:
+    case MessageType::VIDEO:
         return "video";
     default:
         return "";

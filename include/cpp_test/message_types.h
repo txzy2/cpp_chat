@@ -3,7 +3,7 @@
 
 #include <string>
 
-enum MessageType
+enum class MessageType
 {
     PHOTO = 0,
     STRING,
@@ -11,7 +11,7 @@ enum MessageType
     UNKNOWN
 };
 
-std::string enumToString(const MessageType type);
+std::string enumToString(MessageType type);
 MessageType messageTypeToEnum(const std::string& type);
 
 #endif

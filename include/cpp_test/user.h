@@ -28,7 +28,7 @@ class User
     static uint64_t nextId_;
 
 public:
-    explicit User() : id_(++nextId_), status_(ACTIVE)
+    explicit User() : id_(++nextId_), status_(Status::ACTIVE)
     {
         extId_ = boost::uuids::random_generator()();
     }
