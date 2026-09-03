@@ -31,6 +31,22 @@ void Chat::addMessage(const std::string& msg, const MessageType type, const User
     messages_.push_back(std::move(msgObj));
 }
 
+std::optional<User> Chat::getReceiverUser() const
+{
+    const auto* lastMsg = getLastMsg();
+
+    if (!lastMsg) { return std::nullopt; }
+    if (users_.size() != 2) { return std::nullopt; }
+
+    for (const auto& user : users_) {
+        if (user.getId() != lastMsg->getUser().getId() && user.getStatus() == ACTIVE) {
+            return user;
+        }
+    }
+
+    return std::nullopt;
+}
+
 void Chat::getInfo() const
 {
     const auto lastMsg = getLastMsg();
