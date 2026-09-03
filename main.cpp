@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
         Chat c("Chat1");
         c.addUser(u1);
         c.addUser(u2);
-        c.addMessage("MSG", STRING, u1);
+        c.addMessage("Привет, как дела?", STRING, u1);
         c.getInfo();
     } catch (std::exception &e) {
         std::cerr << e.what();

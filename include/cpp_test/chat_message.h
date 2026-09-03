@@ -24,19 +24,12 @@ class ChatMessage
 
 public:
     explicit ChatMessage(const MessageType type, User user)
-        : type_(type), user_(std::move(user))
+        : type_(type), user_(std::move(user)), msg_(""), createdAt_(std::time(nullptr)), updatedAt_(createdAt_)
     {
         if (type_ == UNKNOWN)
         {
             throw std::logic_error("Unknown message type");
         }
-
-        if (user_.getId() == 0) {
-            throw std::logic_error("Invalid user: ID is 0");
-        }
-
-        createdAt_ = std::time(nullptr);
-        updatedAt_ = createdAt_;
 
         id_ = boost::uuids::random_generator()();
     }

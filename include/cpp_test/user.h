@@ -45,9 +45,6 @@ public:
     [[nodiscard]] std::string getUsername() const { return username_; }
     [[nodiscard]] std::string getEmail() const { return email_; }
     [[nodiscard]] Status getStatus() const { return status_; }
-
-private:
-    void generateExtId();
 };
 
 
