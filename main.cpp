@@ -13,6 +13,7 @@
 
 int main(int argc, char *argv[]) {
     std::vector<User> users;
+    std::vector<Chat> chats;
 
     User u1;
     u1.setName("Anton");
@@ -28,12 +29,31 @@ int main(int argc, char *argv[]) {
 
     users.push_back(u2);
 
+    User u3;
+    u3.setName("Dima");
+    u3.setEmail("dima@dima.ru");
+    u3.setUsername("dima");
+
+    users.push_back(u3);
+
     try {
         Chat c("Chat1");
         c.addUser(u1);
         c.addUser(u2);
         c.addMessage("Привет, как дела?", STRING, u1);
-        c.getInfo();
+        chats.push_back(c);
+
+        Chat c2("Chat2");
+        c2.addUser(u3);
+        c2.addUser(u1);
+        c2.addMessage("Димка, в майн пойдешь?", STRING, u1);
+        chats.push_back(c2);
+
+        for (auto& chat : chats)
+        {
+            chat.getInfo();
+        }
+
     } catch (std::exception &e) {
         std::cerr << e.what();
     }

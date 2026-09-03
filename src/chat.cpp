@@ -18,7 +18,7 @@ void Chat::addMessage(const std::string& msg, const MessageType type, const User
 
     if (std::ranges::find_if(users_, [&user](const User& u)
     {
-        return u.getId() == user.getId();
+        return u.getId() == user.getId() || u.getStatus() == ACTIVE;
     }) == users_.end())
     {
         throw std::logic_error("User not found in chat");
@@ -44,7 +44,7 @@ void Chat::getInfo() const
     const auto lastMsgUpdateTime = DateTimeHelper::formatTime(lastMsg->getUpdatedAt());
 
     std::cout << std::format(
-        "ID: {}\n"
+        "\nID: {}\n"
         "CHAT NAME: {} (TYPE: {})\n\n  TEXT: {} (ID: {})\n  From: {} (Type: {})\n\n  CREATED_AT: {}\n  UPDATED_AT: {}\n",
         boost::uuids::to_string(id_),
         name_,
