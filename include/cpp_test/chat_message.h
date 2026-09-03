@@ -23,8 +23,7 @@ class ChatMessage
     std::time_t updatedAt_;
 
 public:
-    explicit ChatMessage(const MessageType type, User user)
-        : type_(type), user_(std::move(user)), msg_(""), createdAt_(std::time(nullptr)), updatedAt_(createdAt_)
+    explicit ChatMessage(const MessageType type, User user) : type_(type), user_(std::move(user))
     {
         if (type_ == UNKNOWN)
         {
