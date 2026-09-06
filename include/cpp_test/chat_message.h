@@ -31,6 +31,9 @@ public:
         }
 
         id_ = boost::uuids::random_generator()();
+
+        createdAt_ = std::time(nullptr);
+        updatedAt_ = createdAt_;
     }
 
     void setMsg(const std::string& msg)

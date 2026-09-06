@@ -2,6 +2,7 @@
 #define CPP_TEST_CHAT_H
 
 #include <deque>
+#include <optional>
 #include <string>
 #include <utility>
 

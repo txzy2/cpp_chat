@@ -74,13 +74,13 @@ void Chat::getInfo() const
     if (const std::optional<User> to = getReceiverUser(); to.has_value())
     {
         std::cout << std::format(
-            " - TEXT: {} (ID: {})\n - From: {} (Name: {})\n - To: {} (Name: {})\n\n - CREATED_AT: {}\n - UPDATED_AT: {}\n",
+            " - TEXT: {} (ID: {})\n - From: {} (ID: {})\n - To: {} (ID: {})\n\n - CREATED_AT: {}\n - UPDATED_AT: {}\n",
             lastMsg->getMsg(),
             boost::uuids::to_string(lastMsg->getId()),
             lastMsg->getUser().getName(),
             boost::uuids::to_string(to->getExtId()),
             to->getName(),
-            enumToString(lastMsg->getType()),
+            boost::uuids::to_string(to->getExtId()),
             DateTimeHelper::formatTime(lastMsg->getCreatedAt()),
             DateTimeHelper::formatTime(lastMsg->getUpdatedAt())
         );
