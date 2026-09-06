@@ -45,6 +45,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 
         chats[0].addUser(users[0]);
         chats[0].addUser(users[2]);
+        chats[0].addUser(users[1]);
         chats[0].addMessage("Привет, как дела?", MessageType::STRING, users[0]);
 
         chats[1].addUser(users[1]);
