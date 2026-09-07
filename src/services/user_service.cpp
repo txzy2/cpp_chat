@@ -1,6 +1,6 @@
 #include "../../include/cpp_test/services/user_service.h"
 
-void UserService::addFriend(uint64_t userId, const User& friend_)
+void UserService::addFriend(const uint64_t userId, const User& friend_) const
 {
     if (userId == friend_.getId())
     {
@@ -20,12 +20,12 @@ void UserService::addFriend(uint64_t userId, const User& friend_)
     userRepo_->saveFriends(userId, friends);
 }
 
-std::vector<User> UserService::getFriends(uint64_t userId)
+std::vector<User> UserService::getFriends(const uint64_t userId) const
 {
     return userRepo_->loadFriends(userId);
 }
 
-bool UserService::areFriends(uint64_t userId, uint64_t friendId)
+bool UserService::areFriends(const uint64_t userId, const uint64_t friendId) const
 {
     return userRepo_->areFriends(userId, friendId);
 }

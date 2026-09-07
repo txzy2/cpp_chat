@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 
-void UserRepo::saveFriends(uint64_t userId, const std::vector<User>& friends)
+void UserRepo::saveFriends(uint64_t userId, const std::vector<User>& friends) const
 {
     std::ifstream inFile(filename_);
     std::vector<std::string> lines;

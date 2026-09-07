@@ -15,11 +15,11 @@ public:
         : messageRepo_(messageRepo), userRepo_(userRepo) {}
 
     void sendMessage(Chat& chat, const std::string& msg, MessageType type, const User& user);
-    std::vector<ChatMessage> getMessages(const std::string& chatId);
+    std::vector<ChatMessage> getMessages(const std::string& chatId) const;
 
 private:
     bool isUserInChat(const Chat& chat, uint64_t userId);
-    bool isUserFriend(uint64_t userId, uint64_t friendId);
+    bool isUserFriend(uint64_t userId, uint64_t friendId) const;
 };
 
 #endif // CPP_TEST_MESSAGE_SERVICE_H

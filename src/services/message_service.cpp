@@ -1,6 +1,6 @@
 #include "../../include/cpp_test/services/message_service.h"
 
-void MessageService::sendMessage(Chat& chat, const std::string& msg, MessageType type, const User& user)
+void MessageService::sendMessage(Chat& chat, const std::string& msg, const MessageType type, const User& user)
 {
     if (!isUserInChat(chat, user.getId()))
     {
@@ -27,17 +27,16 @@ void MessageService::sendMessage(Chat& chat, const std::string& msg, MessageType
     chat.pushMessage(std::move(messageObj));
 }
 
-std::vector<ChatMessage> MessageService::getMessages(const std::string& chatId)
-{
+auto MessageService::getMessages(const std::string& chatId) const -> std::vector<ChatMessage> {
     return messageRepo_->loadByChatId(chatId);
 }
 
-bool MessageService::isUserInChat(const Chat& chat, uint64_t userId)
+bool MessageService::isUserInChat(const Chat& chat, const uint64_t userId)
 {
     return chat.isUserInChat(userId);
 }
 
-bool MessageService::isUserFriend(uint64_t userId, uint64_t friendId)
+bool MessageService::isUserFriend(const uint64_t userId, const uint64_t friendId) const
 {
     return userRepo_->areFriends(userId, friendId);
 }

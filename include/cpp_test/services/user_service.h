@@ -13,9 +13,9 @@ class UserService
 public:
     explicit UserService(UserRepo* repo) : userRepo_(repo) {}
 
-    void addFriend(uint64_t userId, const User& friend_);
-    std::vector<User> getFriends(uint64_t userId);
-    bool areFriends(uint64_t userId, uint64_t friendId);
+    void addFriend(uint64_t userId, const User& friend_) const;
+    std::vector<User> getFriends(uint64_t userId) const;
+    bool areFriends(uint64_t userId, uint64_t friendId) const;
 };
 
 #endif // CPP_TEST_USER_SERVICE_H
