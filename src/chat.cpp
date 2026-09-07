@@ -1,67 +1,22 @@
-//
-// Created by kamaev on 9/1/26.
-//
-
 #include "../include/cpp_test/chat.h"
-#include "../include/cpp_test/message_types.h"
 #include "../include/cpp_test/date_time_helper.h"
 
 #include <format>
 #include <iostream>
 
-// TODO: Выделить отдельный сервис под создание сообщения (ChatService)
-// Добавить логику проверки есть ли пользователь в друзьях
-void Chat::addMessage(const std::string& msg, const MessageType type, const User& user)
+bool Chat::isUserInChat(const uint64_t userId) const
 {
-    if (users_.empty())
+    for (const auto& u : users_)
     {
-        throw std::logic_error("No users found");
+        if (u.getId() == userId) return true;
     }
-
-    auto it = users_.begin();
-    for (; it != users_.end(); ++it)
-    {
-        if (it->getId() == user.getId() && it->getStatus() == Status::ACTIVE)
-        {
-            break;
-        }
-    }
-
-    if (it == users_.end())
-    {
-        throw std::logic_error("User not found in chat");
-    }
-
-    if (messages_.size() >= MAX_MESSAGES) { messages_.pop_front(); }
-
-    ChatMessage msgObj(type, user);
-    msgObj.setMsg(msg);
-    messages_.push_back(std::move(msgObj));
+    return false;
 }
 
-auto Chat::getReceiverUser() const -> std::optional<User>
+const ChatMessage* Chat::getLastMsg() const
 {
-    const auto* lastMsg = getLastMsg();
-
-    if (!lastMsg) { return std::nullopt; }
-    if (users_.size() != 2) { return std::nullopt; }
-
-    for (const auto& user : users_) {
-        if (user.getId() != lastMsg->getUser().getId() && user.getStatus() == Status::ACTIVE) {
-            return user;
-        }
-    }
-
-    return std::nullopt;
-}
-
-void Chat::addUser(const User& user) {
-    for (const auto& u : users_) {
-        if (u.getId() == user.getId()) { return; }
-    }
-
-    users_.push_back(user);
-    updateType();
+    if (messages_.empty()) return nullptr;
+    return &messages_.back();
 }
 
 void Chat::getInfo() const

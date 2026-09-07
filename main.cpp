@@ -6,15 +6,12 @@
 
 #include "include/cpp_test/chat.h"
 #include "include/cpp_test/user.h"
-
-// #include <userver/clients/dns/component.hpp>
-// #include <userver/components/minimal_server_component_list.hpp>
-// #include <userver/server/handlers/tests_control.hpp>
-// #include <userver/utils/daemon_run.hpp>
-
-#include "hello_handler.hpp"
 #include "include/cpp_test/repos/user_repo.h"
+#include "include/cpp_test/repos/chat_repo.h"
+#include "include/cpp_test/repos/message_repo.h"
 #include "include/cpp_test/services/user_service.h"
+#include "include/cpp_test/services/chat_service.h"
+#include "include/cpp_test/services/message_service.h"
 
 namespace {
 
@@ -33,43 +30,52 @@ namespace {
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
 {
     std::array<User, names.size()> users;
-
     for (std::size_t i = 0; i < names.size(); ++i)
     {
         generateUser(users[i], i);
     }
 
-    UserRepo user_repo("storage/user_friends.txt");
-    UserService user_service(&user_repo);
+    UserRepo userRepo("storage/user_friends.txt");
+    ChatRepo chatRepo("storage/chats.txt");
+    MessageRepo messageRepo("storage/messages.txt");
+
+    UserService userService(&userRepo);
+    ChatService chatService(&chatRepo, &userRepo);
+    MessageService messageService(&messageRepo, &userRepo);
 
     try {
-        std::vector<Chat> chats;
-        chats.reserve(2);
-        chats.emplace_back("Chat1");
-        chats.emplace_back("Chat2");
+        userService.addFriend(users[0].getId(), users[1]);
+        userService.addFriend(users[0].getId(), users[2]);
+        userService.addFriend(users[1].getId(), users[0]);
+        userService.addFriend(users[1].getId(), users[2]);
 
-        chats[0].addUser(users[0]);
-        chats[0].addUser(users[2]);
-        chats[0].addUser(users[1]);
-        chats[0].addMessage("Привет, как дела?", MessageType::STRING, users[0]);
-
-        chats[1].addUser(users[1]);
-        chats[1].addUser(users[0]);
-        chats[1].addMessage("Димка, в майн пойдешь?", MessageType::STRING, users[0]);
-
-        for (auto &chat : chats)
+        std::cout << "Friends of " << users[0].getName() << ":\n";
+        for (const auto& f : userService.getFriends(users[0].getId()))
         {
-            chat.getInfo();
+            std::cout << " - " << f.getName() << "\n";
         }
+
+        Chat chat1 = chatService.createChat("Chat1");
+        chatService.addUserToChat(chat1, users[0]);
+        chatService.addUserToChat(chat1, users[1]);
+        chatService.addUserToChat(chat1, users[2]);
+
+        Chat chat2 = chatService.createChat("Chat2");
+        chatService.addUserToChat(chat2, users[0]);
+        chatService.addUserToChat(chat2, users[1]);
+
+        messageService.sendMessage(chat1, "Привет, как дела?", MessageType::STRING, users[0]);
+        messageService.sendMessage(chat2, "Димка, в майн пойдешь?", MessageType::STRING, users[0]);
+
+        chat1.getInfo();
+        chat2.getInfo();
+
+        chatService.saveChat(chat1);
+        chatService.saveChat(chat2);
+
     } catch (const std::exception &e) {
         std::cerr << e.what() << '\n';
     }
-
-    // auto component_list = userver::components::MinimalServerComponentList()
-    //                               .Append<userver::clients::dns::Component>()
-    //                               .Append<HelloHandler>();
-    //
-    // return userver::utils::DaemonMain(argc, argv, component_list);
 
     return 0;
 }
