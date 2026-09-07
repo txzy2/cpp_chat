@@ -13,6 +13,8 @@
 // #include <userver/utils/daemon_run.hpp>
 
 #include "hello_handler.hpp"
+#include "include/cpp_test/repos/user_repo.h"
+#include "include/cpp_test/services/user_service.h"
 
 namespace {
 
@@ -36,6 +38,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
     {
         generateUser(users[i], i);
     }
+
+    UserRepo user_repo("storage/user_friends.txt");
+    UserService user_service(&user_repo);
 
     try {
         std::vector<Chat> chats;

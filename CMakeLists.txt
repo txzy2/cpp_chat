@@ -15,6 +15,11 @@ add_executable(cpp_test
         src/message_types.cpp
         src/user.cpp
         hello_handler.hpp
+        include/cpp_test/services/user_service.h
+        src/repos/user_repo.cpp
+        include/cpp_test/repos/user_repo.h
+        include/cpp_test/user_friends.h
+        src/user_friends.cpp
 )
 
 target_include_directories(cpp_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)

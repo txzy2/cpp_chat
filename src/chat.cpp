@@ -9,6 +9,8 @@
 #include <format>
 #include <iostream>
 
+// TODO: Выделить отдельный сервис под создание сообщения (ChatService)
+// Добавить логику проверки есть ли пользователь в друзьях
 void Chat::addMessage(const std::string& msg, const MessageType type, const User& user)
 {
     if (users_.empty())
